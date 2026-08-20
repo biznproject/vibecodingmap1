@@ -1,4 +1,4 @@
-﻿"""
+"""
 VibeCodingMap Autonomous Background Spec Producer
 Generates architecture blueprints and saves them directly to Supabase.
 """
@@ -16,9 +16,19 @@ if sys.stdout.encoding != "utf-8":
 
 from models import FullProjectSpecification, AimCheck, LogicCheck, ValidationCheck
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://cdmrdzqrunysknhtxmft.supabase.co")
-SERVICE_KEY  = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "sb_secret_feE_R3IJjtIdNDj1tXHkVA_XS_-HlUY")
-REVENUE_WALLET = os.getenv("X402_REVENUE_WALLET", "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3")
+# Safely load local environment variables from .env.local
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=".env.local")
+    load_dotenv(dotenv_path="../.env.local")
+    load_dotenv()
+except ImportError:
+    pass
+
+# Read from environment variables (No hardcoded secrets)
+SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL", os.getenv("SUPABASE_URL", "https://cdmrdzqrunysknhtxmft.supabase.co"))
+SERVICE_KEY  = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+REVENUE_WALLET = os.getenv("NEXT_PUBLIC_X402_REVENUE_WALLET", os.getenv("X402_REVENUE_WALLET", "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3"))
 
 BLUEPRINT_TAXONOMY = [
     {

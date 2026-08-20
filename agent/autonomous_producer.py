@@ -1,133 +1,191 @@
 ﻿"""
 VibeCodingMap Autonomous Background Spec Producer
-Continuously or batch-generates verified, production-grade architecture blueprints
-and automatically registers them into the x402 catalog.
+Generates architecture blueprints and saves them directly to Supabase.
 """
-
 import asyncio
 import json
 import os
 import sys
 import time
 import argparse
-from typing import List, Dict, Any
+import urllib.request
+import urllib.error
 
-# Ensure UTF-8 output on Windows
-if sys.stdout.encoding != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8')
+if sys.stdout.encoding != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from models import FullProjectSpecification, AimCheck, LogicCheck, ValidationCheck
 
-# Pre-curated blueprint templates for diverse high-demand software architectures
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://cdmrdzqrunysknhtxmft.supabase.co")
+SERVICE_KEY  = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "sb_secret_feE_R3IJjtIdNDj1tXHkVA_XS_-HlUY")
+REVENUE_WALLET = os.getenv("X402_REVENUE_WALLET", "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3")
+
 BLUEPRINT_TAXONOMY = [
+    {
+        "slug": "nextjs16-supabase-auth",
+        "title": "Next.js 16 + Supabase Production SSR & Auth Blueprint",
+        "category": "fullstack",
+        "price_usdc": "0.0100",
+        "tags": ["Next.js 16", "React 19", "Supabase", "SSR", "Auth"],
+        "aim": {
+            "core_purpose": "Cookie-based secure session management with SSR optimization for enterprise Next.js 16",
+            "target_audience": "SaaS developers and AI coding agents needing rapid production launch",
+            "design_system": "Bauhaus Minimalist (High contrast, grid-focused)"
+        },
+        "logic": {
+            "tech_stack": ["Next.js 16.1.1", "React 19.2.3", "@supabase/supabase-js 2.97.0", "Tailwind CSS v4"],
+            "primary_features": [
+                "Server Components async Supabase Client injection",
+                "Middleware session auto-refresh and token rotation",
+                "Row Level Security (RLS) policy templates",
+                "React 19 useActionState form action handling"
+            ],
+            "critical_rules": [
+                "Never reference SUPABASE_SERVICE_ROLE_KEY from Client Components",
+                "All Server Actions must validate input with Zod schema first",
+                "Next.js App Router dynamic routes must use params Promise unwrap pattern"
+            ],
+            "directory_structure": "src/\n├── app/(auth)/login/page.tsx\n├── app/api/auth/callback/route.ts\n├── lib/supabase/client.ts\n└── lib/supabase/server.ts"
+        },
+        "validation": {
+            "done_criteria": "Auth flow E2E test pass and Zero Build Error achieved",
+            "test_cases": [
+                "Unauthenticated /dashboard access redirects to /login",
+                "Session cookie expiry triggers Middleware Refresh Token renewal"
+            ],
+            "performance_targets": {"lcp": "< 1.2s", "cls": "0.0", "fid": "< 50ms"}
+        }
+    },
     {
         "slug": "nextjs16-stripe-ecommerce",
         "title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture",
         "category": "fullstack",
-        "tags": ["Next.js 16", "Stripe", "Supabase", "Server Actions", "Zod"],
+        "price_usdc": "0.0150",
+        "tags": ["Next.js 16", "Stripe", "Supabase", "Webhooks", "Zod"],
         "aim": {
-            "core_purpose": "엔터프라이즈급 결제 흐름과 멱등성(Idempotency) 웹훅 처리를 보장하는 고성능 커머스 아키텍처",
-            "target_audience": "글로벌 B2C/B2B 이커머스 개발팀 및 자율 결제 에이전트",
+            "core_purpose": "Enterprise-grade payment flow with idempotency webhook handling for high-performance commerce",
+            "target_audience": "Global B2C/B2B e-commerce teams and autonomous payment agents",
             "design_system": "Bauhaus Minimalist (Bold price tags & clean grid)"
         },
         "logic": {
             "tech_stack": ["Next.js 16.1", "React 19", "Stripe SDK", "Supabase PostgreSQL", "Zod", "Tailwind v4"],
             "primary_features": [
-                "Stripe Checkout 세션 생성 및 서버 액션 바인딩",
-                "Idempotency Key 기반 Stripe Webhook 중복 결제 방지",
-                "Optimistic UI 기반 장바구니 상태 관리",
-                "Supabase RLS 기반 구매 고객 전용 디지털 상품 다운로드 보안"
+                "Stripe Checkout session creation via Server Actions",
+                "Idempotency Key based Stripe Webhook duplicate payment prevention",
+                "Optimistic UI cart state management",
+                "Supabase RLS secured digital product downloads"
             ],
             "critical_rules": [
-                "STRIPE_SECRET_KEY는 절대로 클라이언트 번들에 노출되지 않도록 Server Component/Action에서만 사용할 것",
-                "모든 결제 수신 웹훅은 stripe.webhooks.constructEvent 서명 검증을 필수로 거칠 것",
-                "장바구니 총액 계산은 클라이언트 값을 신뢰하지 않고 서버 DB 가격 기준으로 재계산할 것"
+                "STRIPE_SECRET_KEY must only be used in Server Components/Actions, never client bundle",
+                "All payment webhooks must pass stripe.webhooks.constructEvent signature verification",
+                "Cart total must be recalculated server-side from DB prices, never trust client values"
             ],
-            "directory_structure": "src/\n├── app/\n│   ├── (shop)/products/[id]/page.tsx\n│   ├── api/webhooks/stripe/route.ts\n│   └── checkout/success/page.tsx\n├── lib/stripe.ts\n└── lib/supabase.ts"
+            "directory_structure": "src/\n├── app/(shop)/products/[id]/page.tsx\n├── app/api/webhooks/stripe/route.ts\n├── app/checkout/success/page.tsx\n└── lib/stripe.ts"
         },
         "validation": {
-            "done_criteria": "테스트 카드 결제 및 웹훅 발송 후 주문 DB 생성 성공 및 Zero Build Error",
+            "done_criteria": "Test card payment and webhook delivery result in DB order creation with Zero Build Error",
             "test_cases": [
-                "Stripe CLI 웹훅 트리거(checkout.session.completed) 시 DB 주문 상태 'PAID' 갱신 검증",
-                "변조된 결제 금액 페이로드 전송 시 서버 액션 거부(400) 검증",
-                "네트워크 단절 재시도 시 동일 웹훅 이벤트 멱등성 중복 방지 확인"
+                "Stripe CLI webhook trigger (checkout.session.completed) updates DB order to PAID",
+                "Tampered payment amount payload rejected by server action (400)",
+                "Same webhook event replayed twice is idempotently handled without duplicate order"
             ],
             "performance_targets": {"lcp": "< 1.0s", "cls": "0.0", "fid": "< 30ms"}
-        },
-        "price_usdc": "0.0150"
+        }
     },
     {
         "slug": "fastapi-rag-vector-pipeline",
         "title": "FastAPI + Qdrant + LangChain Production RAG Engine",
         "category": "agent",
+        "price_usdc": "0.0200",
         "tags": ["FastAPI", "Qdrant", "LangChain", "RAG", "Python 3.12"],
         "aim": {
-            "core_purpose": "대용량 사내 문서를 실시간 임베딩하고 고속 하이브리드 검색을 제공하는 엔터프라이즈 RAG 파이프라인",
-            "target_audience": "자체 지식 기반 AI 챗봇 및 에이전트 구축 엔지니어",
+            "core_purpose": "Enterprise RAG pipeline for real-time document embedding and hybrid vector search",
+            "target_audience": "AI chatbot and autonomous agent builders needing private knowledge base",
             "design_system": "Noir Cyber Terminal UI"
         },
         "logic": {
             "tech_stack": ["Python 3.12", "FastAPI", "Qdrant Client", "LangChain 0.3", "Pydantic v2", "OpenAI Embeddings"],
             "primary_features": [
-                "Dense + Sparse 하이브리드 벡터 검색 및 Re-ranking 필터링",
-                "비동기 문서 청킹(Chunking) 및 백그라운드 벡터 인덱싱 파이프라인",
-                "FastAPI StreamingResponse를 통한 LLM 토큰 실시간 SSE 스트리밍",
-                "검색 근거(Citation) 원문 출처 자동 매핑"
+                "Dense + Sparse hybrid vector search with re-ranking",
+                "Async document chunking and background vector indexing pipeline",
+                "FastAPI StreamingResponse for real-time LLM token SSE streaming",
+                "Automatic citation source mapping"
             ],
             "critical_rules": [
-                "모든 API 엔드포인트 요청/응답은 Pydantic BaseModel로 타입 엄격 정의",
-                "Qdrant 연결 풀은 FastAPI lifespan 컨텍스트에서 관리하여 메모리 누수 방지",
-                "문서 청크 크기는 기본 500토큰, 오버랩 50토큰으로 고정하여 맥락 보존"
+                "All API request/response must be strictly typed with Pydantic BaseModel",
+                "Qdrant connection pool managed in FastAPI lifespan context to prevent memory leaks",
+                "Default chunk size 500 tokens, overlap 50 tokens for context preservation"
             ],
-            "directory_structure": "rag_server/\n├── app/\n│   ├── api/routes/chat.py\n│   ├── core/config.py\n│   └── services/vector_store.py\n├── schemas/models.py\n└── main.py"
+            "directory_structure": "rag_server/\n├── app/api/routes/chat.py\n├── app/core/config.py\n├── app/services/vector_store.py\n├── schemas/models.py\n└── main.py"
         },
         "validation": {
-            "done_criteria": "1,000건 문서 인덱싱 후 질문 검색 시 200ms 이내 상위 3개 근거 문서 반환 및 답변 생성 성공",
+            "done_criteria": "1000-document index returns top-3 source citations within 200ms",
             "test_cases": [
-                "알 수 없는 질문 입력 시 환각 없이 '정보 없음' 방어 응답 검증",
-                "동시 50개 쿼리 스트리밍 시 커넥션 타임아웃 0건 검증"
+                "Unknown question input returns hallucination-free 'no information' response",
+                "50 concurrent streaming queries complete with 0 connection timeouts"
             ],
             "performance_targets": {"lcp": "N/A", "cls": "N/A", "fid": "Latency < 250ms"}
-        },
-        "price_usdc": "0.0200"
+        }
     },
     {
-        "slug": "realtime-websocket-canvas",
-        "title": "React 19 + PartyKit + Canvas Real-Time Multiplayer Whiteboard",
-        "category": "frontend",
-        "tags": ["React 19", "WebSockets", "PartyKit", "HTML5 Canvas", "CRDT"],
+        "slug": "agent-mcp-orchestration",
+        "title": "Model Context Protocol (MCP) Multi-Agent Orchestrator",
+        "category": "agent",
+        "price_usdc": "0.0200",
+        "tags": ["MCP", "FastMCP", "Pydantic AI", "Multi-Agent"],
         "aim": {
-            "core_purpose": "수백 명이 동시 접속하여 충돌 없이 도형과 선을 그리는 피그마(Figma) 스타일 실시간 협업 캔버스",
-            "target_audience": "실시간 협업 툴 및 화이트보드 웹 애플리케이션 제작자",
-            "design_system": "Vaporwave Neon Minimalist"
+            "core_purpose": "MCP-standard orchestrator integrating local and remote tools for multi-agent collaboration",
+            "target_audience": "Autonomous M2M systems and complex agent pipeline developers",
+            "design_system": "Noir Terminal & Visual Stream UI"
         },
         "logic": {
-            "tech_stack": ["React 19", "PartyKit / Yjs (CRDT)", "HTML5 Canvas 2D API", "Tailwind CSS v4"],
+            "tech_stack": ["Python 3.12", "Pydantic AI 2.32", "FastMCP 3.4", "HTTPX", "AsyncIO"],
             "primary_features": [
-                "CRDT 기반 동시 드로잉 충돌 방지 및 실시간 커서 브로드캐스팅",
-                "60FPS 무한 캔버스 줌 & 팬(Pan) 하드웨어 가속 렌더링",
-                "오프라인 드로잉 후 재연결 시 변경점 자동 병합(Sync)"
+                "STDIO and SSE based MCP server/client bidirectional bridge",
+                "Tool Execution Context tracking and Fallback handling",
+                "Pydantic-based Tool Definition auto-conversion"
             ],
             "critical_rules": [
-                "Canvas 리드로우(Redraw)는 requestAnimationFrame 루프 내에서만 실행하여 버벅임 제거",
-                "WebSocket 메시지 페이로드는 바이너리(ArrayBuffer) 또는 압축 JSON으로 전송하여 대역폭 절약"
+                "All tool inputs and outputs must be serialized with Pydantic BaseModel",
+                "Tool execution timeout must default to 30 seconds"
             ],
-            "directory_structure": "src/\n├── components/canvas/\n│   ├── Whiteboard.tsx\n│   └── CursorOverlay.tsx\n├── party/server.ts\n└── hooks/useMultiplayer.ts"
+            "directory_structure": "agent/\n├── server/mcp_server.py\n├── client/mcp_client.py\n└── tools/web_search.py"
         },
         "validation": {
-            "done_criteria": "2개 브라우저 동시 드로잉 시 지연 시간 30ms 미만 및 렌더링 싱크 100% 일치",
+            "done_criteria": "Agent completes 3-step compound tool call chain without errors",
             "test_cases": [
-                "네트워크 5초 끊김 시뮬레이션 후 재연결 시 캔버스 복구 검증",
-                "10,000개 도형 렌더링 시 프레임 드랍 50FPS 이상 유지 확인"
+                "Non-existent tool call triggers graceful error recovery",
+                "10 concurrent async tool requests measured for latency"
             ],
-            "performance_targets": {"lcp": "< 0.8s", "cls": "0.0", "fid": "< 16ms (60FPS)"}
-        },
-        "price_usdc": "0.0180"
+            "performance_targets": {"lcp": "N/A", "cls": "N/A", "fid": "Latency < 200ms"}
+        }
     }
 ]
 
-def generate_specification(data: Dict[str, Any]) -> FullProjectSpecification:
-    """Generates a type-safe Pydantic FullProjectSpecification"""
+def supabase_upsert(payload: dict) -> bool:
+    """Upsert a spec record into Supabase x402_specs table."""
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        SUPABASE_URL + "/rest/v1/x402_specs?on_conflict=slug",
+        data=data,
+        method="POST",
+        headers={
+            "apikey": SERVICE_KEY,
+            "Authorization": "Bearer " + SERVICE_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "resolution=merge-duplicates,return=minimal"
+        }
+    )
+    try:
+        with urllib.request.urlopen(req) as res:
+            return res.status in (200, 201, 204)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode()
+        print(f"  [SUPABASE ERROR] {e.code}: {body[:200]}")
+        return False
+
+def generate_and_save(data: dict) -> bool:
+    """Generate Pydantic spec and save to both filesystem and Supabase."""
     aim = AimCheck(
         core_purpose=data["aim"]["core_purpose"],
         target_audience=data["aim"]["target_audience"],
@@ -144,8 +202,7 @@ def generate_specification(data: Dict[str, Any]) -> FullProjectSpecification:
         test_cases=data["validation"]["test_cases"],
         performance_targets=data["validation"]["performance_targets"]
     )
-    
-    return FullProjectSpecification(
+    spec = FullProjectSpecification(
         project_title=data["title"],
         version="1.0.0",
         aim=aim,
@@ -159,65 +216,85 @@ def generate_specification(data: Dict[str, Any]) -> FullProjectSpecification:
         }
     )
 
-def save_spec_to_filesystem(spec: FullProjectSpecification, slug: str):
+    # Save to filesystem
     os.makedirs("agent/generated_specs", exist_ok=True)
-    file_path = f"agent/generated_specs/{slug}.json"
+    file_path = f"agent/generated_specs/{data['slug']}.json"
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(spec.model_dump_json(indent=2))
-    
-    # Append to production log
+
+    # Save to Supabase
+    payload = {
+        "slug": data["slug"],
+        "title": data["title"],
+        "category": data["category"],
+        "price_usdc": float(data["price_usdc"]),
+        "author_wallet": REVENUE_WALLET,
+        "aim_summary": {
+            "corePurpose": data["aim"]["core_purpose"],
+            "targetAudience": data["aim"]["target_audience"],
+            "designSystem": data["aim"]["design_system"]
+        },
+        "protected_logic": {
+            "techStack": data["logic"]["tech_stack"],
+            "primaryFeatures": data["logic"]["primary_features"],
+            "criticalRules": data["logic"]["critical_rules"],
+            "directoryStructure": data["logic"]["directory_structure"]
+        },
+        "validation_spec": {
+            "doneCriteria": data["validation"]["done_criteria"],
+            "testCases": data["validation"]["test_cases"],
+            "performanceTargets": data["validation"]["performance_targets"]
+        },
+        "is_published": True
+    }
+    ok = supabase_upsert(payload)
+
     log_entry = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "slug": slug,
-        "title": spec.project_title,
-        "path": file_path,
-        "status": "PUBLISHED_READY"
+        "slug": data["slug"],
+        "title": data["title"],
+        "supabase_saved": ok
     }
     with open("agent/production_log.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
-    
-    print(f"  [SAVED] Blueprint saved to: {file_path}")
 
-async def run_batch_generation():
-    print("=" * 65)
-    print("🏭 [VibeCodingMap Autonomous Spec Factory — Batch Mode]")
-    print("=" * 65)
-    print(f"Found {len(BLUEPRINT_TAXONOMY)} architectural blueprints to synthesize...\n")
+    return ok
 
-    for idx, item in enumerate(BLUEPRINT_TAXONOMY, start=1):
-        print(f"[{idx}/{len(BLUEPRINT_TAXONOMY)}] Generating: '{item['title']}'...")
-        spec = generate_specification(item)
-        save_spec_to_filesystem(spec, item["slug"])
+async def run_batch():
+    print("=" * 65)
+    print("[VibeCodingMap] Autonomous Spec Factory — Batch Mode")
+    print("=" * 65)
+    print(f"Supabase: {SUPABASE_URL}")
+    print(f"Total blueprints: {len(BLUEPRINT_TAXONOMY)}\n")
+    ok_count = 0
+    for idx, item in enumerate(BLUEPRINT_TAXONOMY, 1):
+        print(f"[{idx}/{len(BLUEPRINT_TAXONOMY)}] '{item['title']}'...")
+        ok = generate_and_save(item)
+        status = "SAVED TO SUPABASE OK" if ok else "LOCAL ONLY (Supabase failed)"
+        print(f"  [{status}] {item['slug']}")
+        ok_count += ok
         await asyncio.sleep(0.5)
-
-    print("\n" + "=" * 65)
-    print(f"✅ All {len(BLUEPRINT_TAXONOMY)} blueprints generated and verified successfully!")
+    print(f"\n{'='*65}")
+    print(f"Done! {ok_count}/{len(BLUEPRINT_TAXONOMY)} blueprints saved to Supabase.")
     print("=" * 65)
 
-async def run_daemon_loop(interval_seconds: int = 3600):
-    print("=" * 65)
-    print(f"🔄 [VibeCodingMap Autonomous Daemon — 24/7 Producer Mode]")
-    print(f"Interval: Every {interval_seconds} seconds")
-    print("=" * 65)
-
+async def run_daemon(interval: int = 3600):
+    print(f"[VibeCodingMap] Daemon Mode — Every {interval}s")
     cycle = 1
     while True:
-        target_item = BLUEPRINT_TAXONOMY[(cycle - 1) % len(BLUEPRINT_TAXONOMY)]
-        print(f"\n[Cycle #{cycle} @ {time.strftime('%Y-%m-%d %H:%M:%S')}] Synthesizing: {target_item['title']}...")
-        spec = generate_specification(target_item)
-        save_spec_to_filesystem(spec, target_item["slug"])
-        print(f"  [STATUS] Blueprint '{target_item['slug']}' ready on x402 market.")
-        print(f"  [SLEEP] Sleeping for {interval_seconds}s until next production cycle...")
+        item = BLUEPRINT_TAXONOMY[(cycle - 1) % len(BLUEPRINT_TAXONOMY)]
+        print(f"\n[Cycle #{cycle} @ {time.strftime('%H:%M:%S')}] {item['title']}")
+        ok = generate_and_save(item)
+        print(f"  Supabase: {'OK' if ok else 'FAILED'} — sleeping {interval}s...")
         cycle += 1
-        await asyncio.sleep(interval_seconds)
+        await asyncio.sleep(interval)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="VibeCoding Autonomous Spec Producer")
-    parser.add_argument("--daemon", action="store_true", help="Run in continuous 24/7 background loop")
-    parser.add_argument("--interval", type=int, default=3600, help="Interval in seconds for daemon mode")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--daemon", action="store_true")
+    parser.add_argument("--interval", type=int, default=3600)
     args = parser.parse_args()
-
     if args.daemon:
-        asyncio.run(run_daemon_loop(args.interval))
+        asyncio.run(run_daemon(args.interval))
     else:
-        asyncio.run(run_batch_generation())
+        asyncio.run(run_batch())

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { X402_SPECS_CATALOG, X402ArchitectureSpec } from "@/data/x402Specs";
@@ -17,6 +17,9 @@ export default function X402MarketplacePage() {
   const [agentResult, setAgentResult] = useState<any>(null);
 
   // Catalog State
+  const [catalogSpecs, setCatalogSpecs] = useState<X402ArchitectureSpec[]>(
+    Object.values(X402_SPECS_CATALOG)
+  );
   const [selectedSpec, setSelectedSpec] = useState<X402ArchitectureSpec>(
     Object.values(X402_SPECS_CATALOG)[0]
   );
@@ -24,6 +27,49 @@ export default function X402MarketplacePage() {
   const [unlockedPayload, setUnlockedPayload] = useState<any>(null);
   const [copiedCurl, setCopiedCurl] = useState(false);
   const [copiedJson, setCopiedJson] = useState(false);
+
+  // Dynamic Catalog Fetch
+  useEffect(() => {
+    async function loadCatalog() {
+      try {
+        const res = await fetch("/api/x402/catalog");
+        const data = await res.json();
+        if (data.status === "success" && data.items) {
+          const fetchedSpecs = data.items.map((item: any) => ({
+            slug: item.slug,
+            title: item.title,
+            category: item.category,
+            priceUSDC: item.priceUSDC,
+            tags: item.tags || [],
+            aim: {
+              corePurpose: item.aimSummary,
+              targetAudience: "Autonomous M2M Coding Agents",
+              designSystem: "Modern Bauhaus Grid"
+            },
+            logic: {
+              techStack: [],
+              primaryFeatures: [],
+              criticalRules: [],
+              directoryStructure: "",
+              envTemplate: []
+            },
+            validation: {
+              doneCriteria: "",
+              testCases: [],
+              performanceTargets: { lcp: "", cls: "", fid: "" }
+            }
+          }));
+          setCatalogSpecs(fetchedSpecs);
+          if (fetchedSpecs.length > 0) {
+            setSelectedSpec(fetchedSpecs[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load live catalog from Supabase:", err);
+      }
+    }
+    loadCatalog();
+  }, []);
 
   // Trigger Local Agent Run
   const handleRunLocalAgent = async () => {
@@ -232,7 +278,7 @@ export default function X402MarketplacePage() {
             <Cpu className="w-4 h-4 text-cyan-400" /> Available Architecture Blueprints
           </h2>
 
-          {Object.values(X402_SPECS_CATALOG).map((spec) => {
+          {catalogSpecs.map((spec) => {
             const isSelected = selectedSpec.slug === spec.slug;
             return (
               <div

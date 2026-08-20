@@ -1,9 +1,9 @@
 {
-  "project_title": "React 19 + PartyKit + Canvas Real-Time Multiplayer Whiteboard",
+  "project_title": "React 19 + PartyKit Real-Time Multiplayer Whiteboard",
   "version": "1.0.0",
   "aim": {
-    "core_purpose": "수백 명이 동시 접속하여 충돌 없이 도형과 선을 그리는 피그마(Figma) 스타일 실시간 협업 캔버스",
-    "target_audience": "실시간 협업 툴 및 화이트보드 웹 애플리케이션 제작자",
+    "core_purpose": "Figma-style real-time collaborative canvas where hundreds can draw simultaneously without conflicts",
+    "target_audience": "Real-time collaboration tool and whiteboard web application builders",
     "design_system": "Vaporwave Neon Minimalist"
   },
   "logic": {
@@ -14,21 +14,21 @@
       "Tailwind CSS v4"
     ],
     "primary_features": [
-      "CRDT 기반 동시 드로잉 충돌 방지 및 실시간 커서 브로드캐스팅",
-      "60FPS 무한 캔버스 줌 & 팬(Pan) 하드웨어 가속 렌더링",
-      "오프라인 드로잉 후 재연결 시 변경점 자동 병합(Sync)"
+      "CRDT-based concurrent drawing conflict prevention and real-time cursor broadcasting",
+      "60FPS infinite canvas zoom & pan hardware-accelerated rendering",
+      "Offline drawing with automatic change merge on reconnection"
     ],
     "critical_rules": [
-      "Canvas 리드로우(Redraw)는 requestAnimationFrame 루프 내에서만 실행하여 버벅임 제거",
-      "WebSocket 메시지 페이로드는 바이너리(ArrayBuffer) 또는 압축 JSON으로 전송하여 대역폭 절약"
+      "Canvas redraw must only run inside requestAnimationFrame loop to eliminate jank",
+      "WebSocket message payload sent as binary (ArrayBuffer) or compressed JSON to save bandwidth"
     ],
     "directory_structure": "src/\n├── components/canvas/\n│   ├── Whiteboard.tsx\n│   └── CursorOverlay.tsx\n├── party/server.ts\n└── hooks/useMultiplayer.ts"
   },
   "validation": {
-    "done_criteria": "2개 브라우저 동시 드로잉 시 지연 시간 30ms 미만 및 렌더링 싱크 100% 일치",
+    "done_criteria": "Two browsers drawing simultaneously show < 30ms latency and 100% render sync",
     "test_cases": [
-      "네트워크 5초 끊김 시뮬레이션 후 재연결 시 캔버스 복구 검증",
-      "10,000개 도형 렌더링 시 프레임 드랍 50FPS 이상 유지 확인"
+      "5s network disconnect simulation followed by reconnect restores canvas state",
+      "10,000 shapes rendered without frame drop below 50FPS"
     ],
     "performance_targets": {
       "lcp": "< 0.8s",
@@ -38,8 +38,8 @@
   },
   "purchased_x402_blueprint": {
     "slug": "realtime-websocket-canvas",
-    "priceUSDC": "0.0180",
+    "priceUSDC": "0.018",
     "generated_by": "Phi-3.5 Autonomous Agent",
-    "verified_at": "2026-08-20T03:43:18Z"
+    "verified_at": "2026-08-20T05:55:44Z"
   }
 }

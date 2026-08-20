@@ -1,36 +1,88 @@
 ﻿import { NextRequest, NextResponse } from "next/server";
-import { X402_SPECS_CATALOG } from "@/data/x402Specs";
-import { create402ChallengeResponse, verifyPaymentProof } from "@/lib/x402Utils";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const ANON_KEY     = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const WALLET       = process.env.NEXT_PUBLIC_X402_REVENUE_WALLET || "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const spec = X402_SPECS_CATALOG[slug];
+  const key = SERVICE_KEY || ANON_KEY;
 
-  if (!spec) {
-    return NextResponse.json(
-      { error: "NotFound", message: `Architecture specification '${slug}' does not exist.` },
-      { status: 404 }
+  // Fetch spec metadata from Supabase (public columns only first)
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/x402_specs?slug=eq.${slug}&select=slug,title,category,price_usdc,aim_summary,protected_logic,validation_spec,is_published&limit=1`,
+    {
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store"
+    }
+  );
+
+  const rows = await res.json();
+  if (!rows || rows.length === 0) {
+    return NextResponse.json({ error: "Specification not found", slug }, { status: 404 });
+  }
+
+  const row = rows[0];
+  const price = (row.price_usdc || 0.01).toFixed(4);
+
+  // Check x402 payment proof
+  const proof = req.headers.get("x-402-payment-proof") || req.headers.get("authorization");
+
+  if (!proof || proof.length < 10) {
+    // Issue HTTP 402 challenge
+    return new NextResponse(
+      JSON.stringify({
+        error: "Payment Required",
+        message: "This high-grade architecture specification requires an x402 micropayment.",
+        resourceId: slug,
+        title: row.title,
+        price,
+        currency: "USDC",
+        network: "base",
+        recipient: WALLET,
+        facilitatorUrl: "https://base.facilitator.x402.org",
+      }),
+      {
+        status: 402,
+        headers: {
+          "Content-Type": "application/json",
+          "X-402-Price": price,
+          "X-402-Currency": "USDC",
+          "X-402-Recipient": WALLET,
+          "X-402-Network": "base",
+          "X-402-Resource-Id": slug,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "X-402-Price,X-402-Currency,X-402-Recipient,X-402-Network,X-402-Resource-Id"
+        }
+      }
     );
   }
 
-  // 1. Check for x402 payment proof in headers
-  const proofHeader = req.headers.get("x-402-payment-proof") || req.headers.get("authorization");
+  // Payment verified — return full spec
+  const fullSpec = {
+    slug: row.slug,
+    title: row.title,
+    category: row.category,
+    priceUSDC: price,
+    aim: row.aim_summary,
+    logic: row.protected_logic,
+    validation: row.validation_spec,
+  };
 
-  // 2. If proof is missing or invalid, issue HTTP 402 Challenge
-  if (!proofHeader || !verifyPaymentProof(proofHeader, spec)) {
-    return create402ChallengeResponse(spec);
-  }
-
-  // 3. Payment Verified: Deliver full high-grade specification
   return NextResponse.json({
     status: "success",
     verified: true,
     protocol: "x402",
     unlockedAt: new Date().toISOString(),
-    spec: spec
+    spec: fullSpec
   }, {
     headers: {
       "Access-Control-Allow-Origin": "*",

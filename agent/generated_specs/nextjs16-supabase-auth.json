@@ -1,0 +1,47 @@
+{
+  "project_title": "Next.js 16 + Supabase Production SSR & Auth Blueprint",
+  "version": "1.0.0",
+  "aim": {
+    "core_purpose": "Cookie-based secure session management with SSR optimization for enterprise Next.js 16",
+    "target_audience": "SaaS developers and AI coding agents needing rapid production launch",
+    "design_system": "Bauhaus Minimalist (High contrast, grid-focused)"
+  },
+  "logic": {
+    "tech_stack": [
+      "Next.js 16.1.1",
+      "React 19.2.3",
+      "@supabase/supabase-js 2.97.0",
+      "Tailwind CSS v4"
+    ],
+    "primary_features": [
+      "Server Components async Supabase Client injection",
+      "Middleware session auto-refresh and token rotation",
+      "Row Level Security (RLS) policy templates",
+      "React 19 useActionState form action handling"
+    ],
+    "critical_rules": [
+      "Never reference SUPABASE_SERVICE_ROLE_KEY from Client Components",
+      "All Server Actions must validate input with Zod schema first",
+      "Next.js App Router dynamic routes must use params Promise unwrap pattern"
+    ],
+    "directory_structure": "src/\n├── app/(auth)/login/page.tsx\n├── app/api/auth/callback/route.ts\n├── lib/supabase/client.ts\n└── lib/supabase/server.ts"
+  },
+  "validation": {
+    "done_criteria": "Auth flow E2E test pass and Zero Build Error achieved",
+    "test_cases": [
+      "Unauthenticated /dashboard access redirects to /login",
+      "Session cookie expiry triggers Middleware Refresh Token renewal"
+    ],
+    "performance_targets": {
+      "lcp": "< 1.2s",
+      "cls": "0.0",
+      "fid": "< 50ms"
+    }
+  },
+  "purchased_x402_blueprint": {
+    "slug": "nextjs16-supabase-auth",
+    "priceUSDC": "0.0100",
+    "generated_by": "Phi-3.5 Autonomous Agent",
+    "verified_at": "2026-08-20T06:40:16Z"
+  }
+}

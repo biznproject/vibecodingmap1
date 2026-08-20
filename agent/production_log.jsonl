@@ -1,3 +1,16 @@
 {"timestamp": "2026-08-20 12:43:17", "slug": "nextjs16-stripe-ecommerce", "title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture", "path": "agent/generated_specs/nextjs16-stripe-ecommerce.json", "status": "PUBLISHED_READY"}
 {"timestamp": "2026-08-20 12:43:18", "slug": "fastapi-rag-vector-pipeline", "title": "FastAPI + Qdrant + LangChain Production RAG Engine", "path": "agent/generated_specs/fastapi-rag-vector-pipeline.json", "status": "PUBLISHED_READY"}
 {"timestamp": "2026-08-20 12:43:18", "slug": "realtime-websocket-canvas", "title": "React 19 + PartyKit + Canvas Real-Time Multiplayer Whiteboard", "path": "agent/generated_specs/realtime-websocket-canvas.json", "status": "PUBLISHED_READY"}
+{"ts": "2026-08-20 14:55:39", "slug": "nextjs16-supabase-auth", "status": "PUBLISHED"}
+{"ts": "2026-08-20 14:55:41", "slug": "nextjs16-stripe-ecommerce", "status": "PUBLISHED"}
+{"ts": "2026-08-20 14:55:43", "slug": "fastapi-rag-vector-pipeline", "status": "PUBLISHED"}
+{"ts": "2026-08-20 14:55:43", "slug": "agent-mcp-orchestration", "status": "PUBLISHED"}
+{"ts": "2026-08-20 14:55:44", "slug": "realtime-websocket-canvas", "status": "PUBLISHED"}
+{"timestamp": "2026-08-20 15:37:33", "slug": "nextjs16-supabase-auth", "title": "Next.js 16 + Supabase Production SSR & Auth Blueprint", "supabase_saved": false}
+{"timestamp": "2026-08-20 15:37:33", "slug": "nextjs16-stripe-ecommerce", "title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture", "supabase_saved": false}
+{"timestamp": "2026-08-20 15:37:35", "slug": "fastapi-rag-vector-pipeline", "title": "FastAPI + Qdrant + LangChain Production RAG Engine", "supabase_saved": false}
+{"timestamp": "2026-08-20 15:37:36", "slug": "agent-mcp-orchestration", "title": "Model Context Protocol (MCP) Multi-Agent Orchestrator", "supabase_saved": false}
+{"timestamp": "2026-08-20 15:40:17", "slug": "nextjs16-supabase-auth", "title": "Next.js 16 + Supabase Production SSR & Auth Blueprint", "supabase_saved": true}
+{"timestamp": "2026-08-20 15:40:18", "slug": "nextjs16-stripe-ecommerce", "title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture", "supabase_saved": true}
+{"timestamp": "2026-08-20 15:40:19", "slug": "fastapi-rag-vector-pipeline", "title": "FastAPI + Qdrant + LangChain Production RAG Engine", "supabase_saved": true}
+{"timestamp": "2026-08-20 15:40:20", "slug": "agent-mcp-orchestration", "title": "Model Context Protocol (MCP) Multi-Agent Orchestrator", "supabase_saved": true}

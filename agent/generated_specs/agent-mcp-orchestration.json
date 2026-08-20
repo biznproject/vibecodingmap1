@@ -1,0 +1,46 @@
+{
+  "project_title": "Model Context Protocol (MCP) Multi-Agent Orchestrator",
+  "version": "1.0.0",
+  "aim": {
+    "core_purpose": "MCP-standard orchestrator integrating local and remote tools for multi-agent collaboration",
+    "target_audience": "Autonomous M2M systems and complex agent pipeline developers",
+    "design_system": "Noir Terminal & Visual Stream UI"
+  },
+  "logic": {
+    "tech_stack": [
+      "Python 3.12",
+      "Pydantic AI 2.32",
+      "FastMCP 3.4",
+      "HTTPX",
+      "AsyncIO"
+    ],
+    "primary_features": [
+      "STDIO and SSE based MCP server/client bidirectional bridge",
+      "Tool Execution Context tracking and Fallback handling",
+      "Pydantic-based Tool Definition auto-conversion"
+    ],
+    "critical_rules": [
+      "All tool inputs and outputs must be serialized with Pydantic BaseModel",
+      "Tool execution timeout must default to 30 seconds"
+    ],
+    "directory_structure": "agent/\n├── server/mcp_server.py\n├── client/mcp_client.py\n└── tools/web_search.py"
+  },
+  "validation": {
+    "done_criteria": "Agent completes 3-step compound tool call chain without errors",
+    "test_cases": [
+      "Non-existent tool call triggers graceful error recovery",
+      "10 concurrent async tool requests measured for latency"
+    ],
+    "performance_targets": {
+      "lcp": "N/A",
+      "cls": "N/A",
+      "fid": "Latency < 200ms"
+    }
+  },
+  "purchased_x402_blueprint": {
+    "slug": "agent-mcp-orchestration",
+    "priceUSDC": "0.0200",
+    "generated_by": "Phi-3.5 Autonomous Agent",
+    "verified_at": "2026-08-20T06:40:19Z"
+  }
+}

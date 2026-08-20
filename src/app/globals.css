@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* Bauhaus Foundation */
+  --background: #1A1A1A;
+  --foreground: #F2F0E8;
+
+  /* Bauhaus Primary Colors */
+  --bauhaus-red: #E63946;
+  --bauhaus-blue: #457B9D;
+  /* Slightly lighter blue for dark theme contrast */
+  --bauhaus-yellow: #FFB703;
+  --bauhaus-white: #FFFFFF;
+
+  /* Engineering Lines */
+  --grid-line: rgba(255, 255, 255, 0.05);
+  /* Lighter grid for dark background */
+  --border-primary: #F2F0E8;
+  /* Light border for dark theme */
+}
+
+/* Tailwind v4용 테마 설정 */
+@theme {
+  --color-bauhaus-red: var(--bauhaus-red);
+  --color-bauhaus-blue: var(--bauhaus-blue);
+  --color-bauhaus-yellow: var(--bauhaus-yellow);
+  --color-bauhaus-white: var(--bauhaus-white);
+}
+
+/* --- Base 스타일 --- */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-mono), monospace;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* --- Bauhaus 유틸리티 직접 정의 (에러 발생 지점 수정) --- */
+
+/* 1. 그리드 시스템 */
+.bauhaus-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 2. 보더 시스템 (Unknown Utility 에러 방지를 위해 @apply 미사용) */
+.bauhaus-border {
+  border: 2px solid var(--border-primary);
+}
+
+.bauhaus-border-thick {
+  border: 6px solid var(--border-primary);
+}
+
+/* 3. 노드 컨테이너 (컴포넌트 스타일) */
+.node-container {
+  border: 2px solid var(--border-primary);
+  /* bauhaus-border 직접 명시 */
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.node-container:hover {
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
+  transform: translate(4px, 4px);
+}
+
+/* 4. 터미널 인터페이스 */
+.terminal-input {
+  background-color: black;
+  color: white;
+  padding: 1.5rem;
+  font-family: var(--font-geist-mono), monospace;
+  border: none;
+  outline: none;
+  width: 100%;
+}
+
+.terminal-input:focus {
+  outline: 4px solid var(--bauhaus-yellow);
+}

@@ -1,0 +1,50 @@
+{
+  "project_title": "VibeCoding Enterprise Dashboard with Supabase Auth",
+  "version": "1.0.0",
+  "aim": {
+    "core_purpose": "안전한 쿠키 기반 세션 인증 및 고성능 SSR 대시보드 구축",
+    "target_audience": "프로덕션 SaaS 개발자 및 AI 코딩 에이전트",
+    "design_system": "Bauhaus Functional Minimalist"
+  },
+  "logic": {
+    "tech_stack": [
+      "Next.js 16.1.1",
+      "React 19.2.3",
+      "@supabase/supabase-js 2.97.0",
+      "Tailwind CSS v4"
+    ],
+    "primary_features": [
+      "Server Components 기반 비동기 Supabase Client 주입",
+      "Middleware 세션 자동 갱신",
+      "React 19 useActionState 폼 액션"
+    ],
+    "critical_rules": [
+      "Client Component에서는 절대로 SUPABASE_SERVICE_ROLE_KEY를 참조하지 말 것",
+      "모든 Server Actions는 zod 스키마로 입력을 1차 검증할 것",
+      "Next.js App Router dynamic route는 params Promise unwrap 패턴을 준수할 것"
+    ],
+    "directory_structure": "src/app/(auth)/login/page.tsx\nsrc/lib/supabase/client.ts\nsrc/lib/supabase/server.ts"
+  },
+  "validation": {
+    "done_criteria": "인증 플로우 E2E 테스트 통과 및 Zero Build Error 달성",
+    "test_cases": [
+      "미인증 사용자 /dashboard 접근 시 /login 리다이렉트 확인",
+      "세션 쿠키 만료 시 Middleware Refresh Token 갱신 검증"
+    ],
+    "performance_targets": {
+      "lcp": "< 1.2s",
+      "cls": "0.0",
+      "fid": "< 50ms"
+    }
+  },
+  "purchased_x402_blueprint": {
+    "title": "Next.js 16 + Supabase Production SSR & Auth Blueprint",
+    "priceUSDC": "0.01",
+    "criticalRules": [
+      "Client Component에서는 절대로 SUPABASE_SERVICE_ROLE_KEY를 참조하지 말 것",
+      "모든 Server Actions는 zod 스키마로 입력을 1차 검증할 것",
+      "Next.js App Router dynamic route는 params Promise unwrap 패턴을 준수할 것"
+    ],
+    "directoryStructure": "src/app/(auth)/login/page.tsx\nsrc/lib/supabase/client.ts\nsrc/lib/supabase/server.ts"
+  }
+}

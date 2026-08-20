@@ -1,0 +1,50 @@
+{
+  "project_title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture",
+  "version": "1.0.0",
+  "aim": {
+    "core_purpose": "엔터프라이즈급 결제 흐름과 멱등성(Idempotency) 웹훅 처리를 보장하는 고성능 커머스 아키텍처",
+    "target_audience": "글로벌 B2C/B2B 이커머스 개발팀 및 자율 결제 에이전트",
+    "design_system": "Bauhaus Minimalist (Bold price tags & clean grid)"
+  },
+  "logic": {
+    "tech_stack": [
+      "Next.js 16.1",
+      "React 19",
+      "Stripe SDK",
+      "Supabase PostgreSQL",
+      "Zod",
+      "Tailwind v4"
+    ],
+    "primary_features": [
+      "Stripe Checkout 세션 생성 및 서버 액션 바인딩",
+      "Idempotency Key 기반 Stripe Webhook 중복 결제 방지",
+      "Optimistic UI 기반 장바구니 상태 관리",
+      "Supabase RLS 기반 구매 고객 전용 디지털 상품 다운로드 보안"
+    ],
+    "critical_rules": [
+      "STRIPE_SECRET_KEY는 절대로 클라이언트 번들에 노출되지 않도록 Server Component/Action에서만 사용할 것",
+      "모든 결제 수신 웹훅은 stripe.webhooks.constructEvent 서명 검증을 필수로 거칠 것",
+      "장바구니 총액 계산은 클라이언트 값을 신뢰하지 않고 서버 DB 가격 기준으로 재계산할 것"
+    ],
+    "directory_structure": "src/\n├── app/\n│   ├── (shop)/products/[id]/page.tsx\n│   ├── api/webhooks/stripe/route.ts\n│   └── checkout/success/page.tsx\n├── lib/stripe.ts\n└── lib/supabase.ts"
+  },
+  "validation": {
+    "done_criteria": "테스트 카드 결제 및 웹훅 발송 후 주문 DB 생성 성공 및 Zero Build Error",
+    "test_cases": [
+      "Stripe CLI 웹훅 트리거(checkout.session.completed) 시 DB 주문 상태 'PAID' 갱신 검증",
+      "변조된 결제 금액 페이로드 전송 시 서버 액션 거부(400) 검증",
+      "네트워크 단절 재시도 시 동일 웹훅 이벤트 멱등성 중복 방지 확인"
+    ],
+    "performance_targets": {
+      "lcp": "< 1.0s",
+      "cls": "0.0",
+      "fid": "< 30ms"
+    }
+  },
+  "purchased_x402_blueprint": {
+    "slug": "nextjs16-stripe-ecommerce",
+    "priceUSDC": "0.0150",
+    "generated_by": "Phi-3.5 Autonomous Agent",
+    "verified_at": "2026-08-20T03:43:17Z"
+  }
+}

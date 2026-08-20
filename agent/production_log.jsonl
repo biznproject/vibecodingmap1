@@ -1,0 +1,3 @@
+{"timestamp": "2026-08-20 12:43:17", "slug": "nextjs16-stripe-ecommerce", "title": "Next.js 16 + Stripe Production E-Commerce & Webhook Architecture", "path": "agent/generated_specs/nextjs16-stripe-ecommerce.json", "status": "PUBLISHED_READY"}
+{"timestamp": "2026-08-20 12:43:18", "slug": "fastapi-rag-vector-pipeline", "title": "FastAPI + Qdrant + LangChain Production RAG Engine", "path": "agent/generated_specs/fastapi-rag-vector-pipeline.json", "status": "PUBLISHED_READY"}
+{"timestamp": "2026-08-20 12:43:18", "slug": "realtime-websocket-canvas", "title": "React 19 + PartyKit + Canvas Real-Time Multiplayer Whiteboard", "path": "agent/generated_specs/realtime-websocket-canvas.json", "status": "PUBLISHED_READY"}

@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import json
 import sys
 
@@ -35,7 +35,7 @@ async def run_simulation():
     print("\n[Step 3] Executing x402 Autonomous Purchase Tool...")
     price = "0.01"
     currency = "USDC"
-    recipient = "0x71C8363837918a7101828D23058866164F0fD08E"
+    recipient = "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3"
     
     print(f"  >> HTTP/1.1 402 Payment Required")
     print(f"  >> Headers: X-402-Price: {price} {currency}, X-402-Recipient: {recipient}")

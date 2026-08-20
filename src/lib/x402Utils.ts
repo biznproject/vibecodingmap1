@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { X402ArchitectureSpec } from "@/data/x402Specs";
 
 export interface X402Challenge {
@@ -13,7 +13,7 @@ export interface X402Challenge {
 }
 
 export const PLATFORM_CONFIG = {
-  walletAddress: "0x71C8363837918a7101828D23058866164F0fD08E",
+  walletAddress: process.env.NEXT_PUBLIC_X402_REVENUE_WALLET || "0xcdBd1625fb843491ae855c0EA110C07492aEcFb3",
   defaultNetwork: "base",
   currency: "USDC",
   facilitatorUrl: "https://base.facilitator.x402.org",

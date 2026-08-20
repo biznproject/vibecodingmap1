@@ -1,0 +1,6 @@
+﻿startCommand:
+  type: stdio
+  command: python
+  args: ["agent/mcp_server.py"]
+  env:
+    VIBECODING_API_URL: "https://vibecodingmap.com"

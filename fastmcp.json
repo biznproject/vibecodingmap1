@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "https://gofastmcp.com/public/schemas/fastmcp.json/v1.json",
+  "name": "vibecodingmap-x402-mcp",
+  "entrypoint": "agent/mcp_server.py",
+  "dependencies": ["fastmcp>=3.4.0", "httpx>=0.28.0", "pydantic>=2.13.0"],
+  "env": {
+    "VIBECODING_API_URL": "https://vibecodingmap.com"
+  }
+}

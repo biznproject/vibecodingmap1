@@ -1,0 +1,11 @@
+﻿{
+  "$schema": "https://glama.ai/mcp/v1/schema.json",
+  "name": "vibecodingmap-x402",
+  "description": "Autonomous architecture specification discovery and x402 micropayments for AI coding agents",
+  "repository": "https://github.com/biznproject/vibecodingmap1",
+  "command": "python",
+  "args": ["agent/mcp_server.py"],
+  "env": {
+    "VIBECODING_API_URL": "https://vibecodingmap.com"
+  }
+}

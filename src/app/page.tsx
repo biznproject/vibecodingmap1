@@ -133,42 +133,125 @@ export default function Home() {
 
   return (
     <div className="flex-1 flex flex-col relative w-full bg-background overflow-x-hidden pt-16 md:pt-24">
-      {/* Tier 1: Glassmorphism Hero Section */}
-      <section className="relative h-screen w-full flex flex-col items-center justify-center p-8 overflow-hidden -mt-16 md:-mt-24">
+      {/* Tier 1: Dual-Track Glassmorphism Hero Section */}
+      <section className="relative min-h-screen w-full flex flex-col items-center justify-center p-6 md:p-12 overflow-hidden -mt-16 md:-mt-24">
         {/* Background Image with Overlay */}
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105"
           style={{ backgroundImage: "url('/bg1.png')" }}
         />
-        <div className="absolute inset-0 z-10 bg-black/70
-
-         backdrop-blur-[0px]" />
+        <div className="absolute inset-0 z-10 bg-black/80 backdrop-blur-[2px]" />
 
         {/* Hero Content */}
-        <div className="relative z-20 flex flex-col items-center gap-8 max-w-4xl w-full text-center">
-          <div className="glass-panel p-10 md:p-16 rounded-3xl border-white/20 flex flex-col items-center gap-6 animate-in fade-in zoom-in duration-1000">
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl">
+        <div className="relative z-20 flex flex-col items-center gap-10 max-w-6xl w-full text-center my-auto pt-16 pb-12">
+          
+          {/* Top Platform Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-xs font-mono font-bold tracking-wider text-cyan-300 animate-in fade-in duration-700">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span>DUAL ARCHITECTURE SYSTEM · HUMAN DIRECTORS & x402 AGENTS</span>
+          </div>
+
+          {/* Main Title */}
+          <div className="space-y-4 max-w-4xl">
+            <h1 className="text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white drop-shadow-2xl uppercase leading-none">
               VIBECODING<br />
-              <span className="text-bauhaus-yellow">BLUEPRINT</span>
+              <span className="bg-gradient-to-r from-bauhaus-yellow via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
+                BLUEPRINT & x402
+              </span>
             </h1>
-            <p className="text-lg md:text-xl font-medium text-white/80 max-w-2xl leading-relaxed">
-              <span className="text-blue-400">[1]</span> Click AIM, LOGIC, or VAL Check to start.<br />
-              <span className="text-blue-400">[2]</span> At least 1 answer in any category to enable export.<br />
-              <span className="text-blue-400">[3]</span> No data is stored. Close the window and everything is erased, so export immediately as MD or TXT.
+            <p className="text-base md:text-xl font-medium text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Design architectural intent visually as a <strong className="text-white">Human Director</strong>, or empower <strong className="text-cyan-300">Autonomous AI Agents (Phi-3.5)</strong> to discover and purchase verified zero-error blueprints via the <strong className="text-bauhaus-yellow">x402 Protocol</strong>.
             </p>
-
-            <button
-              onClick={handleStart}
-              className="mt-8 px-16 py-6 rounded-full text-3xl font-black text-white uppercase tracking-[0.2em] bg-white/10 backdrop-blur-xl border border-white/30 hover:bg-white/20 hover:scale-105 transition-all shadow-2xl group flex items-center justify-center relative z-30 select-none"
-            >
-              <span className="pointer-events-none">START</span>
-            </button>
           </div>
 
-          <div className="absolute bottom-10 animate-bounce flex flex-col items-center gap-2 text-white/50">
-            <span className="text-[10px] font-black tracking-[0.5em] uppercase"></span>
-            <div className="w-0.5 h-12 bg-gradient-to-b from-white/50 to-transparent" />
+          {/* Dual Tracks: Human Track vs Agent Track */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl text-left">
+            
+            {/* Track 1: Human Director Studio */}
+            <div className="glass-panel p-8 rounded-3xl border border-white/20 bg-white/5 backdrop-blur-xl flex flex-col justify-between hover:border-bauhaus-yellow/60 transition-all duration-300 shadow-2xl group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-bauhaus-yellow/20 border border-bauhaus-yellow flex items-center justify-center text-bauhaus-yellow font-black">
+                    👤
+                  </div>
+                  <span className="text-[10px] font-mono uppercase px-2.5 py-1 rounded bg-bauhaus-yellow/20 text-bauhaus-yellow font-bold">
+                    For Humans
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-white tracking-tight mb-2">
+                  Human Director Studio
+                </h3>
+                <p className="text-sm text-gray-300 leading-relaxed mb-6">
+                  Interactive 3-tier checklist (<span className="text-bauhaus-yellow font-bold">AIM</span>, <span className="text-bauhaus-red font-bold">LOGIC</span>, <span className="text-bauhaus-blue font-bold">VAL</span>). Structure your software architecture visually and instantly export clean Markdown/TXT prompt packs for Claude, Cursor, and Devin.
+                </p>
+                <div className="space-y-2 mb-8 text-xs font-mono text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400">✓</span> 3-Stage Prompt Validation Node Check
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400">✓</span> Zero Data Retention (100% Client-side Privacy)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-emerald-400">✓</span> 1-Click Markdown / TXT Prompt Export
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleStart}
+                className="w-full py-4 px-6 rounded-2xl bg-white text-black font-black uppercase tracking-wider text-sm hover:bg-bauhaus-yellow transition-all flex items-center justify-center gap-2 shadow-lg group-hover:scale-[1.02]"
+              >
+                <span>START HUMAN BUILDER</span>
+                <span>↓</span>
+              </button>
+            </div>
+
+            {/* Track 2: AI Agent & x402 Protocol */}
+            <div className="glass-panel p-8 rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-indigo-950/40 to-black backdrop-blur-xl flex flex-col justify-between hover:border-cyan-400 transition-all duration-300 shadow-2xl group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 font-black">
+                    🤖
+                  </div>
+                  <span className="text-[10px] font-mono uppercase px-2.5 py-1 rounded bg-cyan-400/20 text-cyan-300 font-bold">
+                    For AI Agents & M2M
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-white tracking-tight mb-2">
+                  Autonomous x402 Market
+                </h3>
+                <p className="text-sm text-gray-300 leading-relaxed mb-6">
+                  Internet-native <strong className="text-cyan-300 font-mono">HTTP 402</strong> micropayment protocol. Autonomous local agents (Phi-3.5 / Pydantic AI) query, sign on-chain proofs, and purchase production Next.js 16/Supabase rulesets for $0.01 USDC.
+                </p>
+                <div className="space-y-2 mb-8 text-xs font-mono text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <span className="text-cyan-400">⚡</span> Machine-to-Machine Micro-Settlement (Base L2)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-cyan-400">⚡</span> Local Phi-3.5 + Pydantic AI 2.32 Compatible
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-cyan-400">⚡</span> FastMCP Server for Cursor & Claude Desktop
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="/x402"
+                className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-black uppercase tracking-wider text-sm hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(34,211,238,0.3)] group-hover:scale-[1.02]"
+              >
+                <span>EXPLORE x402 AGENT MARKET</span>
+                <span>→</span>
+              </a>
+            </div>
+
           </div>
+
+          <div className="mt-4 flex items-center gap-2 text-xs font-mono text-white/50">
+            <span>Scroll down for the interactive Human MindMap Builder</span>
+            <span>↓</span>
+          </div>
+
         </div>
       </section>
 
